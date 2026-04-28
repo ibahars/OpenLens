@@ -11,7 +11,7 @@
         >Hesap Verebilirlik Platformu</span
       >
     </div>
-
+    //test change
     <div class="text-center max-w-7xl mx-auto">
       <h1
         class="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] tracking-tight mb-8 drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]"
