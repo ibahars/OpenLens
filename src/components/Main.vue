@@ -3,21 +3,23 @@
     id="anasayfa"
     class="relative w-full min-h-screen bg-slate-950 flex flex-col items-center pt-32 px-6 overflow-hidden"
   >
+    <!-- Badge -->
     <div
       class="flex items-center gap-2 px-6 py-2 bg-slate-900/50 border border-white/10 rounded-full mb-10"
     >
       <Scale class="text-slate-400" :size="16" />
-      <span class="text-sm font-medium text-slate-400"
-        >Hesap Verebilirlik Platformu</span
-      >
+      <span class="text-sm font-medium text-slate-400">
+        Hesap Verebilirlik Platformu
+      </span>
     </div>
+
+    <!-- Ana İçerik -->
     <div class="text-center max-w-7xl mx-auto">
       <h1
         class="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] tracking-tight mb-8 drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]"
       >
         Geleceğin
         <span class="text-blue-400">Senin</span> Kararlarınla<br />
-
         <span
           class="bg-gradient-to-r from-blue-400 via-sky-300 to-blue-500 bg-clip-text text-transparent animate-gradient"
         >
@@ -31,12 +33,13 @@
 
       <div class="max-w-3xl mx-auto mb-12">
         <p class="text-lg md:text-xl text-slate-500 leading-relaxed">
-          Şeffaf ve hesap verebilirlik, demokrasinin temel taşlarıdır. Her
+          Şeffaflık ve hesap verebilirlik, demokrasinin temel taşlarıdır. Her
           vatandaşın bilgi edinme hakkı vardır ve bu hak, güçlü bir toplumun
           anahtarıdır.
         </p>
       </div>
 
+      <!-- Butonlar -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
         <button
           @click="scrollToSection('egitim')"
@@ -56,6 +59,7 @@
       </div>
     </div>
 
+    <!-- Arka Plan Efektleri -->
     <div
       class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none -z-10"
     >
@@ -72,12 +76,17 @@
 <script setup>
 import { Scale, Eye, FileText } from "lucide-vue-next";
 
+/**
+ * Belirtilen ID'ye sahip bölüme yumuşak kaydırma yapar.
+ * @param {string} id - Hedef elementin ID'si
+ */
 const scrollToSection = (id) => {
   const element = document.getElementById(id);
   if (element) {
     const headerOffset = 80;
     const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    // window.pageYOffset yerine modern window.scrollY kullanıldı
+    const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
     window.scrollTo({
       top: offsetPosition,
@@ -87,7 +96,7 @@ const scrollToSection = (id) => {
 };
 </script>
 
-<style>
+<style scoped>
 @keyframes gradientMove {
   0% {
     background-position: 0%;

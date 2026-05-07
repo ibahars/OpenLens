@@ -1,154 +1,225 @@
 <template>
-  <section
-    id="egitim"
-    class="relative w-full min-h-screen bg-slate-950 pt-16 pb-32 px-6 overflow-hidden"
+  <div
+    class="min-h-screen w-full bg-slate-950 text-white selection:bg-blue-400/30"
   >
-    <div
-      class="absolute top-1/4 -right-20 w-[600px] h-[600px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none"
-    ></div>
-    <div
-      class="absolute bottom-1/4 -left-20 w-[600px] h-[600px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none"
-    ></div>
-
-    <div class="w-full max-w-7xl mx-auto flex flex-col items-center">
-      <div
-        class="flex items-center gap-2 px-5 py-1.5 bg-blue-500/10 border border-blue-400/20 rounded-full mb-10"
-      >
-        <GraduationCap class="text-blue-400" :size="18" />
-        <span
-          class="text-xs font-black text-blue-400 uppercase tracking-[0.2em]"
-          >Eğitim</span
+    <nav
+      class="sticky top-0 z-50 p-6 bg-slate-950/80 backdrop-blur-md border-b border-white/5"
+    >
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <router-link
+          to="/"
+          class="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 border border-white/10 rounded-xl text-blue-400 font-bold hover:bg-slate-800 hover:text-white transition-all group"
         >
+          <ArrowLeft
+            :size="20"
+            class="group-hover:-translate-x-1 transition-transform"
+          />
+          Anasayfaya Dön
+        </router-link>
+        <div class="flex items-center gap-2 text-slate-400">
+          <GraduationCap :size="20" />
+          <span class="text-sm font-bold tracking-widest uppercase"
+            >Eğitim Platformu</span
+          >
+        </div>
       </div>
+    </nav>
 
-      <div class="text-center mb-24">
-        <h2
-          class="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight"
-        >
-          Eğitim Materyalleri
-        </h2>
-        <p
-          class="text-xl text-slate-400 max-w-3xl mx-auto font-medium leading-relaxed"
-        >
-          Haklarınızı kullanmak ve şeffaflığı artırmak için ihtiyacınız olan
-          kaynaklar
+    <main class="max-w-7xl mx-auto px-6 py-16">
+      <div class="mb-20">
+        <h1 class="text-4xl md:text-6xl font-black mb-6">Eğitim Portalı</h1>
+        <p class="text-slate-400 text-xl max-w-3xl">
+          Şeffaf Bakış projelerinin tüm materyallerine buradan ulaşabilirsiniz.
+          Belgeleri sayfa içinde inceleyebilir veya indirebilirsiniz.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
-        <div
-          class="group relative bg-slate-900/40 border border-white/5 rounded-[2.5rem] p-10 transition-all duration-500 hover:border-blue-400/40 hover:bg-slate-900/80 hover:-translate-y-3"
-        >
-          <div
-            class="mb-10 w-16 h-16 flex items-center justify-center rounded-2xl bg-blue-500/10 text-blue-400 group-hover:scale-110 group-hover:bg-blue-400 group-hover:text-slate-950 transition-all duration-500"
-          >
-            <ClipboardList :size="32" />
-          </div>
-          <h3 class="text-2xl font-extrabold text-white mb-4">
-            Zihin Haritası
-          </h3>
-          <p class="text-slate-500 text-base leading-relaxed mb-12">
-            Konunun genel hatlarını takip edebileceğiniz zihin haritası
-          </p>
-          <button
-            @click="openFile(zihinHaritasi)"
-            class="mt-auto flex items-center gap-2 text-blue-400 font-bold cursor-pointer hover:text-blue-200 transition-colors bg-transparent border-none outline-none"
-          >
-            <Download :size="20" />
-            <span>Göz At</span>
-          </button>
+      <section class="mb-24">
+        <div class="flex items-center gap-4 mb-10">
+          <PlayCircle class="text-rose-500" :size="32" />
+          <h2 class="text-3xl font-bold">Eğitim Videoları</h2>
         </div>
 
-        <div
-          class="group relative bg-slate-900/40 border border-white/5 rounded-[2.5rem] p-10 transition-all duration-500 hover:border-rose-500/40 hover:bg-slate-900/80 hover:-translate-y-3"
-        >
+        <div class="grid md:grid-cols-2 gap-8">
           <div
-            class="mb-10 w-16 h-16 flex items-center justify-center rounded-2xl bg-rose-500/10 text-rose-500 group-hover:scale-110 group-hover:bg-rose-500 group-hover:text-white transition-all duration-500"
+            @click="openFile(dijitalOykuVideo)"
+            class="group bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden hover:border-rose-500/30 transition-all cursor-pointer"
           >
-            <PlayCircle :size="32" />
-          </div>
-          <h3 class="text-2xl font-extrabold text-white mb-4">
-            Eğitim Videosu
-          </h3>
-          <p class="text-slate-500 text-base leading-relaxed mb-12">
-            Bütçe şeffalığı hakkında karikatür eğitim videosu
-          </p>
-          <div
-            class="mt-auto flex items-center gap-2 text-rose-500/50 font-bold cursor-not-allowed"
-          >
-            <Play :size="20" />
-            <span>Pek Yakında</span>
-          </div>
-        </div>
-
-        <div
-          class="group relative bg-slate-900/40 border border-white/5 rounded-[2.5rem] p-10 transition-all duration-500 hover:border-emerald-400/40 hover:bg-slate-900/80 hover:-translate-y-3"
-        >
-          <div
-            class="mb-10 w-16 h-16 flex items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-400 group-hover:text-slate-950 transition-all duration-500"
-          >
-            <BookOpen :size="32" />
-          </div>
-          <h3 class="text-2xl font-extrabold text-white mb-4">İçerik Yazısı</h3>
-          <p class="text-slate-500 text-base leading-relaxed mb-12">
-            Konuyu detaylıca öğrenebileceğiniz belgeler
-          </p>
-          <button
-            @click="openFile(belgePdf)"
-            class="mt-auto flex items-center gap-2 text-emerald-400 font-bold cursor-pointer hover:text-emerald-200 transition-colors bg-transparent border-none outline-none"
-          >
-            <Search :size="20" />
-            <span>İncele</span>
-          </button>
-        </div>
-
-        <div
-          class="group relative bg-slate-900/40 border border-white/5 rounded-[2.5rem] p-10 transition-all duration-500 hover:border-amber-400/40 hover:bg-slate-900/80 hover:-translate-y-3"
-        >
-          <div
-            class="mb-10 w-16 h-16 flex items-center justify-center rounded-2xl bg-amber-500/10 text-amber-400 group-hover:scale-110 group-hover:bg-amber-400 group-hover:text-slate-950 transition-all duration-500"
-          >
-            <Layout :size="32" />
-          </div>
-          <h3 class="text-2xl font-extrabold text-white mb-4">İnfografik</h3>
-          <p class="text-slate-500 text-base leading-relaxed mb-12">
-            Temel konuları özetle görebileceğiniz infografik
-          </p>
-          <button
-            @click="openFile(infografikPdf)"
-            class="mt-auto flex items-center gap-2 text-amber-400 font-bold cursor-pointer hover:text-amber-200 transition-colors bg-transparent border-none outline-none"
-          >
-            <ExternalLink :size="20" />
-            <span>Bağlantı</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="mt-20 flex flex-col items-center group cursor-pointer">
-        <router-link
-          to="/edu-platform"
-          class="mt-20 flex flex-col items-center group cursor-pointer"
-        >
-          <div
-            class="flex items-center gap-3 text-slate-500 group-hover:text-blue-400 transition-all duration-300"
-          >
-            <span class="text-lg font-bold tracking-wide"
-              >Tüm Kaynakları Gör</span
+            <div
+              class="aspect-video bg-slate-800 flex items-center justify-center relative"
             >
-            <ArrowRight
-              :size="20"
-              class="group-hover:translate-x-2 transition-transform duration-300"
-            />
+              <Play
+                :size="48"
+                class="text-rose-500 group-hover:scale-110 transition-transform"
+              />
+              <div class="absolute inset-0 bg-rose-500/5"></div>
+              <span
+                class="absolute bottom-4 right-4 bg-rose-500 px-3 py-1 rounded-md text-xs font-bold text-white shadow-lg"
+                >İZLE</span
+              >
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">
+                Şeffaf Bütçe Karikatür Eğitimi
+              </h3>
+              <p class="text-slate-500 text-sm italic">
+                Bütçe süreçlerini eğlenceli ve basit bir dille anlatan
+                animasyon.
+              </p>
+            </div>
           </div>
+
           <div
-            class="h-[2px] w-12 bg-blue-400/20 mt-2 group-hover:w-40 group-hover:bg-blue-400 transition-all duration-500"
-          ></div>
-        </router-link>
-        <div
-          class="h-[2px] w-12 bg-blue-400/20 mt-2 group-hover:w-40 group-hover:bg-blue-400 transition-all duration-500"
-        ></div>
-      </div>
-    </div>
+            @click="openFile(sunumVideo)"
+            class="group bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden hover:border-blue-500/30 transition-all cursor-pointer"
+          >
+            <div
+              class="aspect-video bg-slate-800 flex items-center justify-center relative"
+            >
+              <Sparkles
+                :size="48"
+                class="text-blue-400 group-hover:scale-110 transition-transform"
+              />
+              <div class="absolute inset-0 bg-blue-400/5"></div>
+              <span
+                class="absolute bottom-4 right-4 bg-blue-400 px-3 py-1 rounded-md text-xs font-bold text-white shadow-lg"
+                >İZLE</span
+              >
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Platform Tanıtım Videosu</h3>
+              <p class="text-slate-500 text-sm italic">
+                Şeffaf Bakış platformunun özelliklerini keşfedin.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="flex items-center gap-4 mb-10">
+          <BookOpen class="text-emerald-400" :size="32" />
+          <h2 class="text-3xl font-bold">Belge Kütüphanesi</h2>
+        </div>
+
+        <div class="space-y-4">
+          <div
+            class="bg-slate-900/50 border border-white/5 rounded-2xl overflow-hidden transition-all duration-300"
+            :class="{
+              'border-emerald-400/20 shadow-[0_0_30px_rgba(52,211,153,0.05)]':
+                openPanel === 1,
+            }"
+          >
+            <button
+              @click="togglePanel(1)"
+              class="w-full p-6 flex justify-between items-center hover:bg-white/5 transition-colors"
+            >
+              <div class="flex items-center gap-4 text-left">
+                <FileText class="text-emerald-400" :size="24" />
+                <span class="text-lg font-bold"
+                  >Temel Eğitim Belgesi (PDF)</span
+                >
+              </div>
+              <ChevronDown
+                :size="24"
+                class="text-slate-500 transition-transform duration-300"
+                :class="{ 'rotate-180 text-emerald-400': openPanel === 1 }"
+              />
+            </button>
+            <div
+              v-show="openPanel === 1"
+              class="p-6 border-t border-white/5 bg-slate-950/50"
+            >
+              <p class="text-slate-400 mb-6 italic">
+                Konuyu detaylıca öğrenebileceğiniz okumalar ve hukuki bilgiler.
+              </p>
+              <button
+                @click="openFile(belgePdf)"
+                class="flex items-center gap-2 px-6 py-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl font-bold hover:bg-emerald-500 hover:text-slate-950 transition-all"
+              >
+                <Eye :size="18" /> Belgeyi Görüntüle
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="bg-slate-900/50 border border-white/5 rounded-2xl overflow-hidden transition-all duration-300"
+            :class="{
+              'border-amber-400/20 shadow-[0_0_30px_rgba(251,191,36,0.05)]':
+                openPanel === 2,
+            }"
+          >
+            <button
+              @click="togglePanel(2)"
+              class="w-full p-6 flex justify-between items-center hover:bg-white/5 transition-colors"
+            >
+              <div class="flex items-center gap-4 text-left">
+                <Layout class="text-amber-400" :size="24" />
+                <span class="text-lg font-bold">Özet İnfografik</span>
+              </div>
+              <ChevronDown
+                :size="24"
+                class="text-slate-500 transition-transform duration-300"
+                :class="{ 'rotate-180 text-amber-400': openPanel === 2 }"
+              />
+            </button>
+            <div
+              v-show="openPanel === 2"
+              class="p-6 border-t border-white/5 bg-slate-950/50"
+            >
+              <p class="text-slate-400 mb-6 italic">
+                Temel konuları tek bakışta anlayabileceğiniz görsel özet
+                materyali.
+              </p>
+              <button
+                @click="openFile(infografikPdf)"
+                class="flex items-center gap-2 px-6 py-3 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-xl font-bold hover:bg-amber-500 hover:text-slate-950 transition-all"
+              >
+                <Eye :size="18" /> İncele
+              </button>
+            </div>
+          </div>
+
+          <div
+            class="bg-slate-900/50 border border-white/5 rounded-2xl overflow-hidden transition-all duration-300"
+            :class="{
+              'border-blue-400/20 shadow-[0_0_30px_rgba(96,165,250,0.05)]':
+                openPanel === 3,
+            }"
+          >
+            <button
+              @click="togglePanel(3)"
+              class="w-full p-6 flex justify-between items-center hover:bg-white/5 transition-colors"
+            >
+              <div class="flex items-center gap-4 text-left">
+                <ClipboardList class="text-blue-400" :size="24" />
+                <span class="text-lg font-bold">Kavramsal Zihin Haritası</span>
+              </div>
+              <ChevronDown
+                :size="24"
+                class="text-slate-500 transition-transform duration-300"
+                :class="{ 'rotate-180 text-blue-400': openPanel === 3 }"
+              />
+            </button>
+            <div
+              v-show="openPanel === 3"
+              class="p-6 border-t border-white/5 bg-slate-950/50"
+            >
+              <p class="text-slate-400 mb-6 italic">
+                Haklarınız ve şeffaflık kavramları arasındaki ilişkileri
+                gösteren yapı.
+              </p>
+              <button
+                @click="openFile(zihinHaritasi)"
+                class="flex items-center gap-2 px-6 py-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl font-bold hover:bg-blue-500 hover:text-slate-950 transition-all"
+              >
+                <Eye :size="18" /> Göz At
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
 
     <div
       v-if="activeFile"
@@ -171,12 +242,21 @@
             <X :size="28" />
           </button>
         </div>
-        <div class="flex-1 w-full h-full bg-white overflow-auto">
+        <div class="flex-1 w-full h-full overflow-hidden">
           <iframe
             v-if="activeFile.toLowerCase().endsWith('.pdf')"
             :src="activeFile"
-            class="w-full h-full border-none"
+            class="w-full h-full border-none bg-white"
           ></iframe>
+
+          <video
+            v-else-if="activeFile.toLowerCase().endsWith('.mp4')"
+            :src="activeFile"
+            controls
+            autoplay
+            class="w-full h-full bg-black object-contain"
+          ></video>
+
           <div
             v-else
             class="w-full h-full flex items-center justify-center bg-slate-950 p-4"
@@ -189,30 +269,39 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import {
+  ArrowLeft,
   GraduationCap,
-  ClipboardList,
-  Download,
   PlayCircle,
   Play,
+  Sparkles,
   BookOpen,
-  Search,
-  Layout,
-  ExternalLink,
-  ArrowRight,
+  ChevronDown,
+  Eye,
   X,
+  FileText,
+  Layout,
+  ClipboardList,
 } from "lucide-vue-next";
 
-import zihinHaritasi from "../assets/zihin-haritasi.png";
+// Assets Import
 import belgePdf from "../assets/Belge.pdf";
 import infografikPdf from "../assets/infografik.pdf";
+import zihinHaritasi from "../assets/zihin-haritasi.png";
+import dijitalOykuVideo from "../assets/dijital_öykü.mp4";
+import sunumVideo from "../assets/sunum.mp4";
 
+const openPanel = ref(1);
 const activeFile = ref(null);
+
+const togglePanel = (index) => {
+  openPanel.value = openPanel.value === index ? null : index;
+};
 
 const openFile = (file) => {
   activeFile.value = file;

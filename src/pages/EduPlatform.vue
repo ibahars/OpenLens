@@ -42,19 +42,23 @@
 
         <div class="grid md:grid-cols-2 gap-8">
           <div
-            class="group bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden hover:border-rose-500/30 transition-all cursor-not-allowed opacity-80"
+            @click="openFile(dijitalOykuVideo)"
+            class="group bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden hover:border-rose-500/50 transition-all cursor-pointer"
           >
             <div
               class="aspect-video bg-slate-800 flex items-center justify-center relative"
             >
-              <Play :size="48" class="text-rose-500/50" />
+              <Play
+                :size="48"
+                class="text-rose-500 group-hover:scale-110 transition-transform"
+              />
               <div class="absolute inset-0 bg-rose-500/5"></div>
               <span
-                class="absolute bottom-4 right-4 bg-slate-950/80 px-3 py-1 rounded-md text-xs font-bold text-rose-500 border border-rose-500/20"
-                >PEK YAKINDA</span
+                class="absolute bottom-4 right-4 bg-rose-500 px-3 py-1 rounded-md text-xs font-bold text-white shadow-lg"
+                >İZLE</span
               >
             </div>
-            <div class="p-6 text-center md:text-left">
+            <div class="p-6">
               <h3 class="text-xl font-bold mb-2">
                 Şeffaf Bütçe Karikatür Eğitimi
               </h3>
@@ -66,19 +70,23 @@
           </div>
 
           <div
-            class="group bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden hover:border-blue-500/30 transition-all cursor-not-allowed opacity-80"
+            @click="openFile(sunumVideo)"
+            class="group bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden hover:border-blue-500/50 transition-all cursor-pointer"
           >
             <div
               class="aspect-video bg-slate-800 flex items-center justify-center relative"
             >
-              <Sparkles :size="48" class="text-blue-400/50" />
+              <Sparkles
+                :size="48"
+                class="text-blue-400 group-hover:scale-110 transition-transform"
+              />
               <div class="absolute inset-0 bg-blue-400/5"></div>
               <span
-                class="absolute bottom-4 right-4 bg-slate-950/80 px-3 py-1 rounded-md text-xs font-bold text-blue-400 border border-blue-400/20"
-                >PEK YAKINDA</span
+                class="absolute bottom-4 right-4 bg-blue-400 px-3 py-1 rounded-md text-xs font-bold text-white shadow-lg"
+                >İZLE</span
               >
             </div>
-            <div class="p-6 text-center md:text-left">
+            <div class="p-6">
               <h3 class="text-xl font-bold mb-2">Platform Tanıtım Videosu</h3>
               <p class="text-slate-500 text-sm italic">
                 Şeffaf Bakış platformunun özelliklerini keşfedin.
@@ -222,7 +230,7 @@
         @click="closeFile"
       ></div>
       <div
-        class="relative w-full h-full max-w-6xl bg-slate-900 rounded-3xl border border-white/10 shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-300"
+        class="relative w-full h-full max-w-6xl bg-slate-900 rounded-3xl border border-white/10 shadow-2xl flex flex-col overflow-hidden"
       >
         <div
           class="p-4 border-b border-white/5 flex justify-end items-center bg-slate-900/50"
@@ -234,19 +242,28 @@
             <X :size="28" />
           </button>
         </div>
-        <div class="flex-1 w-full h-full bg-white overflow-auto">
+        <div class="flex-1 w-full h-full overflow-hidden bg-black">
           <iframe
             v-if="activeFile.toLowerCase().endsWith('.pdf')"
             :src="activeFile"
-            class="w-full h-full border-none"
+            class="w-full h-full border-none bg-white"
           ></iframe>
+
+          <video
+            v-else-if="activeFile.toLowerCase().endsWith('.mp4')"
+            :src="activeFile"
+            controls
+            autoplay
+            class="w-full h-full object-contain"
+          ></video>
+
           <div
             v-else
-            class="w-full h-full flex items-center justify-center bg-slate-950 p-4"
+            class="w-full h-full flex items-center justify-center p-4"
           >
             <img
               :src="activeFile"
-              class="max-w-full max-h-full object-contain shadow-2xl"
+              class="max-w-full max-h-full object-contain"
             />
           </div>
         </div>
@@ -272,9 +289,14 @@ import {
   ClipboardList,
 } from "lucide-vue-next";
 
+// Varlıkları (Assets) İçeri Aktarma
 import belgePdf from "../assets/Belge.pdf";
 import infografikPdf from "../assets/infografik.pdf";
 import zihinHaritasi from "../assets/zihin-haritasi.png";
+
+// Videoları İçeri Aktarma
+import dijitalOykuVideo from "../assets/dijital_öykü.mp4";
+import sunumVideo from "../assets/sunum.mp4";
 
 const openPanel = ref(1);
 const activeFile = ref(null);
