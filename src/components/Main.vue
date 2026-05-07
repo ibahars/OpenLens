@@ -3,111 +3,84 @@
     id="anasayfa"
     class="relative w-full min-h-screen bg-slate-950 flex flex-col items-center pt-32 px-6 overflow-hidden"
   >
-    <!-- Badge -->
+    <!-- Badge: Amacı netleştiriyoruz -->
     <div
-      class="flex items-center gap-2 px-6 py-2 bg-slate-900/50 border border-white/10 rounded-full mb-10"
+      class="flex items-center gap-2 px-6 py-2 bg-blue-400/10 border border-blue-400/20 rounded-full mb-10"
     >
-      <Scale class="text-slate-400" :size="16" />
-      <span class="text-sm font-medium text-slate-400">
-        Hesap Verebilirlik Platformu
+      <GraduationCap class="text-blue-400" :size="16" />
+      <span class="text-sm font-bold text-blue-400 uppercase tracking-widest">
+        Dijital Eğitim ve Farkındalık Platformu
       </span>
     </div>
 
     <!-- Ana İçerik -->
     <div class="text-center max-w-7xl mx-auto">
       <h1
-        class="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] tracking-tight mb-8 drop-shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+        class="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] tracking-tight mb-8"
       >
-        Geleceğin
-        <span class="text-blue-400">Senin</span> Kararlarınla<br />
+        Haklarını <span class="text-blue-400">Öğren</span>,<br />
+        Bütçeni
         <span
           class="bg-gradient-to-r from-blue-400 via-sky-300 to-blue-500 bg-clip-text text-transparent animate-gradient"
         >
-          Şekilleniyor
+          Denetle
         </span>
       </h1>
 
-      <p class="text-2xl md:text-3xl text-slate-200 font-medium mb-6">
-        Sormaya hakkın var: Paramız nereye gidiyor?
+      <p class="text-2xl md:text-3xl text-slate-200 font-semibold mb-6">
+        Şeffaf Bakış ile Vatandaşlık Bilincini Geliştirin.
       </p>
 
       <div class="max-w-3xl mx-auto mb-12">
-        <p class="text-lg md:text-xl text-slate-500 leading-relaxed">
-          Şeffaflık ve hesap verebilirlik, demokrasinin temel taşlarıdır. Her
-          vatandaşın bilgi edinme hakkı vardır ve bu hak, güçlü bir toplumun
-          anahtarıdır.
+        <p class="text-lg md:text-xl text-slate-400 leading-relaxed">
+          Kamu kaynaklarının kullanımını anlamak ve bütçe süreçlerini takip
+          etmek her vatandaşın hakkıdır.
+          <span class="text-white">Eğitim portalımızdaki</span> interaktif
+          materyallerle şeffaflık kültürünü birlikte inşa ediyoruz.
         </p>
       </div>
 
-      <!-- Butonlar -->
+      <!-- Butonlar: Aksiyon odaklı -->
       <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
         <button
-          @click="scrollToSection('egitim')"
-          class="flex items-center gap-3 px-10 py-4 bg-blue-400 text-slate-950 font-bold rounded-xl shadow-[0_0_40px_rgba(56,189,248,0.5)] transition-all duration-300 hover:bg-blue-300 hover:shadow-[0_0_60px_rgba(56,189,248,0.8)] hover:scale-105 active:scale-95"
+          @click="goToPlatform"
+          class="flex items-center gap-3 px-10 py-4 bg-blue-400 text-slate-950 font-bold rounded-xl shadow-[0_0_40px_rgba(56,189,248,0.4)] transition-all duration-300 hover:bg-blue-300 hover:scale-105 active:scale-95"
         >
-          <Eye :size="20" />
-          <span>Keşfetmeye Başla</span>
+          <PlayCircle :size="20" />
+          <span>Eğitime Hemen Başla</span>
         </button>
 
         <button
           @click="scrollToSection('bilgi-kosesi')"
-          class="flex items-center gap-3 px-10 py-4 bg-slate-900 text-slate-400 hover:bg-slate-800 hover:text-white border border-white/10 rounded-xl transition-all font-bold active:scale-95"
+          class="flex items-center gap-3 px-10 py-4 bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white border border-white/10 rounded-xl transition-all font-bold active:scale-95"
         >
-          <FileText :size="20" />
-          <span>Haklarını Öğren</span>
+          <BookOpen :size="20" />
+          <span>Platformu Tanı</span>
         </button>
       </div>
     </div>
 
-    <!-- Arka Plan Efektleri -->
-    <div
-      class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none -z-10"
-    >
-      <div
-        class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-400/10 blur-[120px] rounded-full"
-      ></div>
-      <div
-        class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-900/20 blur-[120px] rounded-full"
-      ></div>
-    </div>
+    <!-- Arka plan efektleri aynı kalabilir -->
   </section>
 </template>
 
 <script setup>
-import { Scale, Eye, FileText } from "lucide-vue-next";
+import { GraduationCap, PlayCircle, BookOpen } from "lucide-vue-next";
+import { useRouter } from "vue-router";
 
-/**
- * Belirtilen ID'ye sahip bölüme yumuşak kaydırma yapar.
- * @param {string} id - Hedef elementin ID'si
- */
+const router = useRouter();
+
+const goToPlatform = () => {
+  router.push("/edu-platform");
+};
+
 const scrollToSection = (id) => {
   const element = document.getElementById(id);
   if (element) {
-    const headerOffset = 80;
-    const elementPosition = element.getBoundingClientRect().top;
-    // window.pageYOffset yerine modern window.scrollY kullanıldı
-    const offsetPosition = elementPosition + window.scrollY - headerOffset;
-
     window.scrollTo({
-      top: offsetPosition,
+      top: element.offsetTop - 80,
       behavior: "smooth",
     });
   }
 };
 </script>
-
-<style scoped>
-@keyframes gradientMove {
-  0% {
-    background-position: 0%;
-  }
-  100% {
-    background-position: 200%;
-  }
-}
-
-.animate-gradient {
-  background-size: 200%;
-  animation: gradientMove 4s linear infinite;
-}
-</style>
