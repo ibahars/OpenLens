@@ -1,1 +1,33 @@
 @import "tailwindcss";
+
+html.text-lg-active {
+  font-size: 110% !important;
+}
+html.text-xl-active {
+  font-size: 120% !important;
+}
+
+/* Yüksek Kontrast Modu */
+html.high-contrast-active,
+html.high-contrast-active body,
+html.high-contrast-active div,
+html.high-contrast-active nav,
+html.high-contrast-active header {
+  background-color: #000000 !important;
+  border-color: #ffffff !important;
+}
+html.high-contrast-active p,
+html.high-contrast-active span,
+html.high-contrast-active h1,
+html.high-contrast-active h2,
+html.high-contrast-active h3 {
+  color: #ffffff !important;
+}
+
+/* Kolay Okunabilir Yazı Tipi */
+html.dyslexic-font-active,
+html.dyslexic-font-active * {
+  font-family: 'Comic Sans MS', 'Dyslexie', sans-serif !important;
+  letter-spacing: 0.05em !important;
+  word-spacing: 0.1em !important;
+}

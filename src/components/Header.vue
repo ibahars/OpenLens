@@ -50,6 +50,122 @@
           />
         </button>
 
+        <!-- Erişilebilirlik Butonu ve Paneli -->
+        <div class="relative">
+          <button
+            @click="toggleAccessibilityMenu"
+            class="p-2 bg-slate-900 border border-white/10 rounded-lg text-slate-400 hover:text-white hover:border-blue-400/50 transition-all flex items-center gap-1.5 font-semibold text-sm"
+            aria-label="Erişilebilirlik Ayarları"
+          >
+            <Eye :size="18" />
+            Görünüm
+          </button>
+
+          <!-- Dropdown Panel -->
+          <div
+            v-if="isAccessibilityMenuOpen"
+            class="absolute right-0 mt-3 w-72 bg-slate-900 border border-white/10 rounded-2xl p-5 shadow-2xl backdrop-blur-2xl z-[60] flex flex-col gap-4 animate-in fade-in slide-in-from-top-2 duration-200"
+          >
+            <div
+              class="flex items-center justify-between border-b border-white/5 pb-2"
+            >
+              <span
+                class="text-sm font-bold text-white flex items-center gap-2"
+              >
+                <Sliders :size="16" class="text-blue-400" /> Erişilebilirlik
+              </span>
+              <button
+                @click="resetSettings"
+                class="text-xs text-blue-400 hover:underline"
+              >
+                Sıfırla
+              </button>
+            </div>
+
+            <!-- Yazı Boyutu Ayarı -->
+            <div class="flex flex-col gap-2">
+              <span class="text-xs font-bold text-slate-400">Yazı Boyutu</span>
+              <div
+                class="grid grid-cols-3 gap-2 bg-slate-950 p-1 rounded-xl border border-white/5"
+              >
+                <button
+                  @click="setTextSize('normal')"
+                  :class="[
+                    'py-1.5 text-xs font-bold rounded-lg transition-all',
+                    textSize === 'normal'
+                      ? 'bg-blue-400 text-slate-950'
+                      : 'text-slate-400 hover:text-white',
+                  ]"
+                >
+                  A
+                </button>
+                <button
+                  @click="setTextSize('lg')"
+                  :class="[
+                    'py-1.5 text-sm font-bold rounded-lg transition-all',
+                    textSize === 'lg'
+                      ? 'bg-blue-400 text-slate-950'
+                      : 'text-slate-400 hover:text-white',
+                  ]"
+                >
+                  A+
+                </button>
+                <button
+                  @click="setTextSize('xl')"
+                  :class="[
+                    'py-1.5 text-base font-bold rounded-lg transition-all',
+                    textSize === 'xl'
+                      ? 'bg-blue-400 text-slate-950'
+                      : 'text-slate-400 hover:text-white',
+                  ]"
+                >
+                  A++
+                </button>
+              </div>
+            </div>
+
+            <!-- Yüksek Kontrast Switch -->
+            <div
+              class="flex items-center justify-between bg-slate-950/50 p-3 rounded-xl border border-white/5"
+            >
+              <span class="text-xs font-bold text-slate-300"
+                >Yüksek Kontrast (Saf Siyah)</span
+              >
+              <button
+                @click="toggleHighContrast"
+                :class="[
+                  'w-10 h-6 flex items-center rounded-full p-1 transition-all duration-300',
+                  isHighContrast
+                    ? 'bg-blue-400 justify-end'
+                    : 'bg-slate-800 justify-start',
+                ]"
+              >
+                <span class="w-4 h-4 rounded-full bg-white shadow-md"></span>
+              </button>
+            </div>
+
+            <!-- Disleksi Dostu Yazı Tipi Switch -->
+            <div
+              class="flex items-center justify-between bg-slate-950/50 p-3 rounded-xl border border-white/5"
+            >
+              <span class="text-xs font-bold text-slate-300"
+                >Kolay Okunabilir Font</span
+              >
+              <button
+                @click="toggleDyslexicFont"
+                :class="[
+                  'w-10 h-6 flex items-center rounded-full p-1 transition-all duration-300',
+                  isDyslexicFont
+                    ? 'bg-blue-400 justify-end'
+                    : 'bg-slate-800 justify-start',
+                ]"
+              >
+                <span class="w-4 h-4 rounded-full bg-white shadow-md"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <button
           @click="goToPlatform"
           :aria-current="isOnPlatform ? 'page' : undefined"
@@ -74,7 +190,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
-import { Sparkles } from "lucide-vue-next";
+import { Sparkles, Eye, Sliders } from "lucide-vue-next";
 import { useRouter, useRoute } from "vue-router";
 
 const router = useRouter();
@@ -89,6 +205,59 @@ const navItems = [
 
 const isOnPlatform = computed(() => route.path === "/edu-platform");
 const activeSection = ref("anasayfa");
+
+// Erişilebilirlik State'leri
+const isAccessibilityMenuOpen = ref(false);
+const textSize = ref("normal");
+const isHighContrast = ref(false);
+const isDyslexicFont = ref(false);
+
+const toggleAccessibilityMenu = () => {
+  isAccessibilityMenuOpen.value = !isAccessibilityMenuOpen.value;
+};
+
+// Sayfaya Sınıf Ekleme/Çıkarma İşlemleri
+const setTextSize = (size) => {
+  textSize.value = size;
+  document.documentElement.classList.remove("text-lg-active", "text-xl-active");
+  if (size === "lg") document.documentElement.classList.add("text-lg-active");
+  if (size === "xl") document.documentElement.classList.add("text-xl-active");
+};
+
+const toggleHighContrast = () => {
+  isHighContrast.value = !isHighContrast.value;
+  if (isHighContrast.value) {
+    document.documentElement.classList.add("high-contrast-active");
+  } else {
+    document.documentElement.classList.remove("high-contrast-active");
+  }
+};
+
+const toggleDyslexicFont = () => {
+  isDyslexicFont.value = !isDyslexicFont.value;
+  if (isDyslexicFont.value) {
+    document.documentElement.classList.add("dyslexic-font-active");
+  } else {
+    document.documentElement.classList.remove("dyslexic-font-active");
+  }
+};
+
+const resetSettings = () => {
+  setTextSize("normal");
+  isHighContrast.value = false;
+  isDyslexicFont.value = false;
+  document.documentElement.classList.remove(
+    "high-contrast-active",
+    "dyslexic-font-active",
+  );
+};
+
+// Panel Dışına Tıklayınca Kapatma Mantığı
+const closeMenuOnOutsideClick = (event) => {
+  if (isAccessibilityMenuOpen.value && !event.target.closest(".relative")) {
+    isAccessibilityMenuOpen.value = false;
+  }
+};
 
 const updateActiveSection = () => {
   if (isOnPlatform.value) return;
@@ -123,11 +292,13 @@ watch(
 
 onMounted(() => {
   window.addEventListener("scroll", updateActiveSection, { passive: true });
+  window.addEventListener("click", closeMenuOnOutsideClick);
   updateActiveSection();
 });
 
 onUnmounted(() => {
   window.removeEventListener("scroll", updateActiveSection);
+  window.removeEventListener("click", closeMenuOnOutsideClick);
 });
 
 const goToPlatform = () => router.push("/edu-platform");
