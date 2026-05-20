@@ -8,6 +8,7 @@
       <Info />
       <Education />
     </main>
+    <ToastContainer />
   </div>
 </template>
 
@@ -16,4 +17,5 @@ import Header from "../components/Header.vue";
 import Main from "../components/Main.vue";
 import Info from "../components/Info.vue";
 import Education from "../components/Education.vue";
+import ToastContainer from "../components/ToastContainer.vue";
 </script>

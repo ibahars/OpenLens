@@ -42,7 +42,12 @@
 
         <div class="grid md:grid-cols-2 gap-8">
           <div
-            @click="openFile(dijitalOykuVideo)"
+            @click="
+              handleOpenVideo(
+                dijitalOykuVideo,
+                'Şeffaf Bütçe Karikatür Eğitimi',
+              )
+            "
             class="group bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden hover:border-rose-500/50 transition-all cursor-pointer"
           >
             <div
@@ -70,7 +75,7 @@
           </div>
 
           <div
-            @click="openFile(sunumVideo)"
+            @click="handleOpenVideo(sunumVideo, 'Platform Tanıtım Videosu')"
             class="group bg-slate-900/50 border border-white/5 rounded-3xl overflow-hidden hover:border-blue-500/50 transition-all cursor-pointer"
           >
             <div
@@ -134,7 +139,7 @@
                 Konuyu detaylıca öğrenebileceğiniz okumalar ve hukuki bilgiler.
               </p>
               <button
-                @click="openFile(belgePdf)"
+                @click="handleOpenDoc(belgePdf, 'Temel Eğitim Belgesi')"
                 class="flex items-center gap-2 px-6 py-3 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-xl font-bold hover:bg-emerald-500 hover:text-slate-950 transition-all"
               >
                 <Eye :size="18" /> Belgeyi Görüntüle
@@ -172,7 +177,7 @@
                 materyali.
               </p>
               <button
-                @click="openFile(infografikPdf)"
+                @click="handleOpenDoc(infografikPdf, 'Özet İnfografik')"
                 class="flex items-center gap-2 px-6 py-3 bg-amber-500/10 text-amber-400 border border-amber-500/20 rounded-xl font-bold hover:bg-amber-500 hover:text-slate-950 transition-all"
               >
                 <Eye :size="18" /> İncele
@@ -210,7 +215,9 @@
                 gösteren yapı.
               </p>
               <button
-                @click="openFile(zihinHaritasi)"
+                @click="
+                  handleOpenDoc(zihinHaritasi, 'Kavramsal Zihin Haritası')
+                "
                 class="flex items-center gap-2 px-6 py-3 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-xl font-bold hover:bg-blue-500 hover:text-slate-950 transition-all"
               >
                 <Eye :size="18" /> Göz At
@@ -248,7 +255,6 @@
             :src="activeFile"
             class="w-full h-full border-none bg-white"
           ></iframe>
-
           <video
             v-else-if="activeFile.toLowerCase().endsWith('.mp4')"
             :src="activeFile"
@@ -256,7 +262,6 @@
             autoplay
             class="w-full h-full object-contain"
           ></video>
-
           <div
             v-else
             class="w-full h-full flex items-center justify-center p-4"
@@ -269,11 +274,13 @@
         </div>
       </div>
     </div>
+
+    <ToastContainer />
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import {
   ArrowLeft,
   GraduationCap,
@@ -289,20 +296,42 @@ import {
   ClipboardList,
 } from "lucide-vue-next";
 
-// Varlıkları (Assets) İçeri Aktarma
+import { useToast } from "../composables/useToast.js";
+import ToastContainer from "../components/ToastContainer.vue";
+
 import belgePdf from "../assets/Belge.pdf";
 import infografikPdf from "../assets/infografik.pdf";
 import zihinHaritasi from "../assets/zihin-haritasi.png";
-
-// Videoları İçeri Aktarma
 import dijitalOykuVideo from "../assets/dijital_öykü.mp4";
 import sunumVideo from "../assets/sunum.mp4";
+
+const { success, info, toasts } = useToast();
 
 const openPanel = ref(1);
 const activeFile = ref(null);
 
+onMounted(() => {
+  success("Eğitim Platformuna hoş geldiniz! 🎓", { duration: 4000 });
+});
+
+onUnmounted(() => {
+  if (toasts && toasts.value) {
+    toasts.value = [];
+  }
+});
+
 const togglePanel = (index) => {
   openPanel.value = openPanel.value === index ? null : index;
+};
+
+const handleOpenVideo = (file, title) => {
+  info(`"${title}" yükleniyor…`, { duration: 2500 });
+  openFile(file);
+};
+
+const handleOpenDoc = (file, title) => {
+  info(`"${title}" açılıyor…`, { duration: 2500 });
+  openFile(file);
 };
 
 const openFile = (file) => {

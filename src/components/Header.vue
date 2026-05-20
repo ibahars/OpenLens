@@ -5,8 +5,9 @@
     <div
       class="w-full max-w-7xl mx-auto px-6 flex justify-between items-center"
     >
+      <!-- Logo -->
       <div
-        @click="scrollToSection('anasayfa')"
+        @click="handleLogoClick"
         class="flex items-center gap-3 cursor-pointer group"
       >
         <div
@@ -22,21 +23,52 @@
         </span>
       </div>
 
-      <nav class="hidden md:flex items-center gap-6">
+      <!-- Nav -->
+      <nav
+        class="hidden md:flex items-center gap-6"
+        aria-label="Ana Navigasyon"
+      >
         <button
           v-for="item in navItems"
           :key="item.id"
           @click="scrollToSection(item.id)"
-          class="px-4 py-2 text-sm font-bold text-slate-400 hover:text-white transition-all duration-300"
+          :aria-current="activeSection === item.id ? 'true' : undefined"
+          :class="[
+            'relative px-4 py-2 text-sm font-bold transition-all duration-300',
+            activeSection === item.id
+              ? 'text-white'
+              : 'text-slate-400 hover:text-white',
+          ]"
         >
           {{ item.name }}
+          <span
+            :class="[
+              'absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] bg-blue-400 rounded-full transition-all duration-300',
+              activeSection === item.id
+                ? 'w-full opacity-100'
+                : 'w-0 opacity-0',
+            ]"
+            aria-hidden="true"
+          />
         </button>
 
+        <!-- Platform butonu -->
         <button
           @click="goToPlatform"
-          class="px-5 py-2 text-sm font-bold bg-blue-500/10 text-blue-400 border border-blue-400/20 rounded-lg hover:bg-blue-400 hover:text-slate-950 transition-all duration-300"
+          :aria-current="isOnPlatform ? 'page' : undefined"
+          :class="[
+            'relative px-5 py-2 text-sm font-bold border rounded-lg transition-all duration-300',
+            isOnPlatform
+              ? 'bg-blue-400 text-slate-950 border-blue-400'
+              : 'bg-blue-500/10 text-blue-400 border-blue-400/20 hover:bg-blue-400 hover:text-slate-950',
+          ]"
         >
           Platform
+          <span
+            v-if="isOnPlatform"
+            class="absolute -bottom-[3px] left-1/2 -translate-x-1/2 w-2/3 h-[2px] bg-blue-300 rounded-full"
+            aria-hidden="true"
+          />
         </button>
       </nav>
     </div>
@@ -44,10 +76,12 @@
 </template>
 
 <script setup>
+import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { Sparkles } from "lucide-vue-next";
-import { useRouter } from "vue-router"; // Yönlendirme için eklendi
+import { useRouter, useRoute } from "vue-router";
 
 const router = useRouter();
+const route = useRoute();
 
 const navItems = [
   { name: "Anasayfa", id: "anasayfa" },
@@ -55,25 +89,70 @@ const navItems = [
   { name: "Eğitim", id: "egitim" },
 ];
 
-// Platform sayfasına gitme fonksiyonu
-const goToPlatform = () => {
-  // Router'da EduPlatform sayfasının isminin 'EduPlatform' veya yolunun '/edu-platform' olduğunu varsayıyorum
-  router.push("/edu-platform");
+const isOnPlatform = computed(() => route.path === "/edu-platform");
+const activeSection = ref("anasayfa");
+
+const updateActiveSection = () => {
+  if (isOnPlatform.value) return;
+
+  const scrollY = window.scrollY;
+  const winHeight = window.innerHeight;
+  const docHeight = document.documentElement.scrollHeight;
+  const headerOffset = 120;
+
+  // Sayfanın en altına yaklaştık mı? → son section aktif
+  if (scrollY + winHeight >= docHeight - 80) {
+    activeSection.value = navItems[navItems.length - 1].id;
+    return;
+  }
+
+  let current = navItems[0].id;
+  for (const item of navItems) {
+    const el = document.getElementById(item.id);
+    if (!el) continue;
+    const top = el.getBoundingClientRect().top + scrollY - headerOffset;
+    if (scrollY >= top) current = item.id;
+  }
+
+  activeSection.value = current;
+};
+
+watch(
+  () => route.path,
+  (newPath) => {
+    if (newPath === "/") setTimeout(updateActiveSection, 150);
+  },
+);
+
+onMounted(() => {
+  window.addEventListener("scroll", updateActiveSection, { passive: true });
+  updateActiveSection();
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", updateActiveSection);
+});
+
+const goToPlatform = () => router.push("/edu-platform");
+
+const handleLogoClick = () => {
+  if (isOnPlatform.value) router.push("/");
+  else scrollToSection("anasayfa");
 };
 
 const scrollToSection = (id) => {
-  // Eğer başka bir sayfadaysak önce anasayfaya gidip sonra kaydırma yapması gerekebilir
-  // Ancak şu an aynı sayfada olduğun varsayımıyla:
-  const element = document.getElementById(id);
-  if (element) {
-    const headerOffset = 80;
-    const elementPosition = element.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.scrollY - headerOffset;
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: "smooth",
-    });
+  if (isOnPlatform.value) {
+    router.push("/").then(() => setTimeout(() => scrollTo(id), 150));
+    return;
   }
+  scrollTo(id);
+};
+
+const scrollTo = (id) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const top = el.getBoundingClientRect().top + window.scrollY - 80;
+  window.scrollTo({ top, behavior: "smooth" });
+  activeSection.value = id;
 };
 </script>
