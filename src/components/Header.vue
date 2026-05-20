@@ -5,7 +5,6 @@
     <div
       class="w-full max-w-7xl mx-auto px-6 flex justify-between items-center"
     >
-      <!-- Logo -->
       <div
         @click="handleLogoClick"
         class="flex items-center gap-3 cursor-pointer group"
@@ -23,7 +22,6 @@
         </span>
       </div>
 
-      <!-- Nav -->
       <nav
         class="hidden md:flex items-center gap-6"
         aria-label="Ana Navigasyon"
@@ -52,7 +50,6 @@
           />
         </button>
 
-        <!-- Platform butonu -->
         <button
           @click="goToPlatform"
           :aria-current="isOnPlatform ? 'page' : undefined"
@@ -87,6 +84,7 @@ const navItems = [
   { name: "Anasayfa", id: "anasayfa" },
   { name: "Bilgi Köşesi", id: "bilgi-kosesi" },
   { name: "Eğitim", id: "egitim" },
+  { name: "S.S.S.", id: "sss" },
 ];
 
 const isOnPlatform = computed(() => route.path === "/edu-platform");
@@ -100,7 +98,6 @@ const updateActiveSection = () => {
   const docHeight = document.documentElement.scrollHeight;
   const headerOffset = 120;
 
-  // Sayfanın en altına yaklaştık mı? → son section aktif
   if (scrollY + winHeight >= docHeight - 80) {
     activeSection.value = navItems[navItems.length - 1].id;
     return;
